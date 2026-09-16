@@ -10,16 +10,22 @@ module "eks" {
       before_compute = true
       # addon_version = "v1.14.3-eksbuild.3"
       resolve_conflicts_on_create = "OVERWRITE" // 
-      most_recent = "true"
+      most_recent                 = "true"
     }
     eks-pod-identity-agent = {
       before_compute = true
-      most_recent = "true"
+      most_recent    = "true"
     }
     kube-proxy = {}
     vpc-cni = {
       before_compute = true
-      most_recent = "true"
+      most_recent    = "true"
+    }
+    ebs-csi-driver = {
+      before_compute = true
+      //      most_recent    = "true"
+      addon_version            = "v1.66.0-eksbuild.1"
+      service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
     }
   }
 

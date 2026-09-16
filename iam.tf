@@ -169,9 +169,42 @@ resource "aws_iam_policy" "externalDNS_permissions" {
   )
 }
 
-/* IAM role for GitHub Actions to provision AWS resources (IRSA)
-  - this role applies to the provider -> Principal = "Federated":  "arn:aws:iam::<aws_id>:oidc-provider/MyProvider"
+/* IAM role to enable EBS CSI driver to create EBS volumes for pods
+    - Allows the EBS CSI driver to create EBS volumes on behalf of pods
+    - Source: https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
 */
 
+resource "aws_iam_role" "ebs_csi_driver" {
+  name = "EBS-CSi-Driver-Role"
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowEksAuthToAssumeRoleForPodIdentity",
+        "Effect" : "Allow",
+
+        "Action" : [
+          "sts:AssumeRole",
+          "sts:TagSession"
+        ],
+
+        "Principal" : {
+          "Service" : "pods.eks.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+data "aws_iam_policy" "ebs_csi" {
+  name = "AmazonEBSCSIDriverPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi" {
+  role       = aws_iam_role.ebs_csi_driver.name
+  policy_arn = data.aws_iam_policy.ebs_csi.arn
+}
 // Get AWS account id
 data "aws_caller_identity" "current" {}
+
+
