@@ -180,17 +180,16 @@ resource "aws_iam_role" "ebs_csi_driver" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
-        "Sid" : "AllowEksAuthToAssumeRoleForPodIdentity",
         "Effect" : "Allow",
 
         "Action" : [
-          "sts:AssumeRole",
+          "sts:AssumeRoleWithWebIdentity",
           "sts:TagSession"
         ],
 
-        "Principal" : {
-          "Service" : "pods.eks.amazonaws.com"
-        }
+        "Principal": {
+          "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+        },
       }
     ]
   })
