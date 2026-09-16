@@ -54,10 +54,10 @@ jobs:
       run: aws --version
 
     - name: Verify AWS identity
-      run: aws sts get-caller-identity
+      run: aws sts get-caller-identity --profile DevUser
 
     - name: Debug EKS token
-      run: aws eks get-token --cluster-name My-Cluster --region us-east-1
+      run: aws eks get-token --cluster-name My-Cluster --region us-east-1 --profile DevUser
 
     - name: Apply Terraform
       run: terraform apply -auto-approve
