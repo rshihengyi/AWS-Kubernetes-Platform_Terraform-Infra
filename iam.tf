@@ -206,7 +206,7 @@ resource "aws_iam_role" "ebs_csi_driver" {
 }
 
 data "aws_iam_policy" "ebs_csi" {
-  name = "AmazonEBSCSIDriverPolicy"
+  name = "AmazonEBSCSIDriverPolicyV2"
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_csi" {
