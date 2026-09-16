@@ -49,9 +49,7 @@ jobs:
         TF_VAR_my_region: ${{ secrets.MY_REGION }}
         TF_VAR_region_a: ${{ secrets.REGION_A }}
         TF_VAR_region_b: ${{ secrets.REGION_B }}
-        TF_VAR_github_owner_id: ${{ secrets.GIT_USER_ID }}
-        TF_VAR_github_repo_id: ${{ secrets.GIT_REPO_ID }}
-      
+
     - name: Apply Terraform
       run: terraform apply -auto-approve
       env:
@@ -60,6 +58,4 @@ jobs:
         TF_VAR_my_region: ${{ secrets.MY_REGION }}
         TF_VAR_region_a: ${{ secrets.REGION_A }}
         TF_VAR_region_b: ${{ secrets.REGION_B }}
-        TF_VAR_github_owner_id: ${{ secrets.GIT_USER_ID }}
-        TF_VAR_github_repo_id: ${{ secrets.GIT_REPO_ID }}
         
