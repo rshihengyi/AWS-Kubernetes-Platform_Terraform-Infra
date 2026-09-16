@@ -76,8 +76,8 @@ resource "aws_eks_access_policy_association" "dev_sso_user_admin" {
 }
 
 resource "aws_eks_addon" "ebs_csi_driver" {
-  cluster_name = module.eks.cluster_name
-  addon_name   = "aws-ebs-csi-driver"
-  service_account_role_arn = aws_iam_role.ebs_csi_driver.arn  
-  depends_on = [aws_iam_role.ebs_csi_driver, module.eks] 
+  cluster_name             = module.eks.cluster_name
+  addon_name               = "aws-ebs-csi-driver"
+  service_account_role_arn = aws_iam_role.ebs_csi_driver_role.arn
+  depends_on               = [aws_iam_role.ebs_csi_driver_role, module.eks]
 }

@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 /* IAM role for Worker Nodes
     - allows the Pod Identity Agent to reach EKS Auth API on behalf of pods
 */
@@ -174,7 +176,7 @@ resource "aws_iam_policy" "externalDNS_permissions" {
     - Source: https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html
 */
 
-resource "aws_iam_role" "ebs_csi_driver" {
+resource "aws_iam_role" "ebs_csi_driver_role" {
   name = "EBS-CSi-Driver-Role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -183,23 +185,13 @@ resource "aws_iam_role" "ebs_csi_driver" {
         "Effect" : "Allow",
 
         "Action" : [
-          "sts:AssumeRoleWithWebIdentity",
+          "sts:AssumeRole",
           "sts:TagSession"
         ],
 
-        "Principal": {
-          "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/token.actions.githubusercontent.com"
+        "Principal" : {
+          "Service" : "pods.eks.amazonaws.com"
         },
-
-        Condition = {
-          StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:rshihengyi@${var.github_owner_id}/AWS-Kubernetes-Platform_Terraform-Infra@${var.github_repo_id}:ref:refs/heads/main"
-          }
-          StringEquals = {
-            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          }
-        }
-
       }
     ]
   })
@@ -209,11 +201,16 @@ data "aws_iam_policy" "ebs_csi" {
   name = "AmazonEBSCSIDriverPolicyV2"
 }
 
-resource "aws_iam_role_policy_attachment" "ebs_csi" {
-  role       = aws_iam_role.ebs_csi_driver.name
+resource "aws_eks_pod_identity_association" "ebs_csi_driver" {
+  cluster_name    = module.eks.cluster_name
+  role_arn        = aws_iam_role.ebs_csi_driver_role.arn
+  service_account = "ebs-csi-controller-sa"
+  namespace       = "kube-system"
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi_pa" {
+  role       = aws_iam_role.ebs_csi_driver_role.name
   policy_arn = data.aws_iam_policy.ebs_csi.arn
 }
-// Get AWS account id
-data "aws_caller_identity" "current" {}
 
 
