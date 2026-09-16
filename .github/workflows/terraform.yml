@@ -50,6 +50,9 @@ jobs:
         TF_VAR_region_a: ${{ secrets.REGION_A }}
         TF_VAR_region_b: ${{ secrets.REGION_B }}
 
+    - name: Check AWS CLI
+      run: aws --version
+
     - name: Apply Terraform
       run: terraform apply -auto-approve
       env:
