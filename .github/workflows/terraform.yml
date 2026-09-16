@@ -53,6 +53,9 @@ jobs:
     - name: Check AWS CLI
       run: aws --version
 
+    - name: Verify AWS identity
+      run: aws sts get-caller-identity
+
     - name: Apply Terraform
       run: terraform apply -auto-approve
       env:
