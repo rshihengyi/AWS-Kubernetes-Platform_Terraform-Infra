@@ -21,11 +21,11 @@ module "eks" {
       before_compute = true
       most_recent    = "true"
     }
-#    ebs-csi-driver = {
-#     before_compute = true
-#     most_recent    = "true"
-#     service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
-#   }
+    # ebs-csi-driver = {
+    #   before_compute = false
+    #   most_recent    = "true"
+    #   service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
+    # }
   }
 
   # Optional
@@ -73,4 +73,10 @@ resource "aws_eks_access_policy_association" "dev_sso_user_admin" {
   access_scope {
     type = "cluster"
   }
+}
+
+resource "aws_eks_addon" "ebs_csi_driver" {
+  cluster_name = module.eks.cluster_name
+  addon_name   = "aws-ebs-csi-driver"
+  service_account_role_arn = aws_iam_role.ebs_csi_driver.arn  
 }
