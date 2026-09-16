@@ -21,11 +21,11 @@ module "eks" {
       before_compute = true
       most_recent    = "true"
     }
-    ebs-csi-driver = {
-      before_compute = true
-      most_recent    = "true"
-      service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
-    }
+#    ebs-csi-driver = {
+#     before_compute = true
+#     most_recent    = "true"
+#     service_account_role_arn = aws_iam_role.ebs_csi_driver.arn
+#   }
   }
 
   # Optional
