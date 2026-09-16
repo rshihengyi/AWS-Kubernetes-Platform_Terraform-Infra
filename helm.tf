@@ -6,7 +6,7 @@ resource "kubernetes_namespace_v1" "argocd" {
   metadata {
     name = "argocd"
   }
-  depends_on = [module.eks]
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
 
 resource "helm_release" "argocd" {
@@ -15,7 +15,7 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "9.5.9"
   namespace  = kubernetes_namespace_v1.argocd.metadata[0].name
-  depends_on = [module.eks]
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
 
 # /*
@@ -28,7 +28,7 @@ resource "helm_release" "ingress_controller" {
   chart      = "aws-load-balancer-controller"
   version    = "3.5.0"
   namespace  = "kube-system"
-  depends_on = [module.eks]
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 
   /* need to specify:
     - clusterName
@@ -72,7 +72,7 @@ resource "helm_release" "external_dns" {
   chart      = "external-dns"
   version    = "1.21.1"
   namespace  = "kube-system"
-  depends_on = [module.eks]
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 
   set = [
     {
