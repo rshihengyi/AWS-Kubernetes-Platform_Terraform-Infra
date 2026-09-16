@@ -48,9 +48,9 @@ module "eks" {
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["t2.small"] // CPU: 1   Mem: 2 GiB RAM
 
-      min_size     = 2 //total amount of running worker nodes spread across the subnets. 
-      max_size     = 4
-      desired_size = 2
+      min_size     = 4 //total amount of running worker nodes spread across the subnets. 
+      max_size     = 5
+      desired_size = 4
     }
   }
 
