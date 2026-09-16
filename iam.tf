@@ -193,7 +193,7 @@ resource "aws_iam_role" "ebs_csi_driver" {
 
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:${var.github_owner}@${var.github_owner_id}/${var.github_repo}@${var.github_repo_id}:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub" = "repo:rshihengyi@${var.github_owner_id}/AWS-Kubernetes-Platform_Terraform-Infra@${var.github_repo_id}:ref:refs/heads/main"
           }
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
