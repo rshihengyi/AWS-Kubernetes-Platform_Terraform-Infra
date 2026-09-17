@@ -22,14 +22,14 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v4
 
-    - name: Get Repo ID
-      uses: nvdaes/get-repository-id@v1
-      with:
-        repository: rshihengyi/AWS-Enterprise-Kubernetes-Platform_Terraform-Infra
+    # - name: Get Repo ID
+    #   uses: nvdaes/get-repository-id@v1
+    #   with:
+    #     repository: rshihengyi/AWS-Enterprise-Kubernetes-Platform_Terraform-Infra
 
-    - name: Debug OIDC token claims
-      run: |
-        curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -R 'split(".") | .[1] | @base64d | fromjson'
+    # - name: Debug OIDC token claims
+    #   run: |
+    #     curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -R 'split(".") | .[1] | @base64d | fromjson'
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v6.2.4
@@ -53,11 +53,11 @@ jobs:
     - name: Check AWS CLI
       run: aws --version
 
-    - name: Verify AWS identity
-      run: aws sts get-caller-identity --profile DevUser
+    # - name: Verify AWS identity
+    #   run: aws sts get-caller-identity --profile DevUser
 
-    - name: Debug EKS token
-      run: aws eks get-token --cluster-name My-Cluster --region us-east-1 --profile DevUser
+    # - name: Debug EKS token
+    #   run: aws eks get-token --cluster-name My-Cluster --region us-east-1 --profile DevUser
 
     - name: Apply Terraform
       run: terraform apply -auto-approve
