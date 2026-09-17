@@ -42,8 +42,20 @@ jobs:
         TF_VAR_region_b: ${{ secrets.REGION_B }}
 
 
-    - name: List VPC Dependencies
-      run: aws ec2 describe-subnets & aws ec2 describe-internet-gateways & aws ec2 describe-nat-gateways & aws ec2 describe-network-interfaces & aws ec2 describe-security-groups
+    - name: List Subnets
+      run: aws ec2 describe-subnets
+
+    - name: List IWG
+      run: aws ec2 describe-internet-gateways
+
+    - name: List NAT GW
+      run: aws ec2 describe-nat-gateways
+      
+    - name: List Network Interfaces
+      run: aws ec2 describe-network-interfaces
+      
+    - name: List Security Groups
+      run: aws ec2 describe-security-groups
 
       
     - name: Destroy Terraform
