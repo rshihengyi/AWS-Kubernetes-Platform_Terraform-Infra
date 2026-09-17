@@ -105,10 +105,10 @@ resource "aws_internet_gateway" "my_IWG" {
   region = var.my_region
 }
 
-resource "aws_internet_gateway_attachment " "my_IWG_attachment" {
-  vpc_id             = aws_vpc.my_vpc.id
+resource "aws_internet_gateway_attachment" "my_IWG_attachment" {
+  vpc_id              = aws_vpc.my_vpc.id
   internet_gateway_id = aws_internet_gateway.my_IWG.id
-  depends_on = [ aws_vpc.my_vpc ]
+  depends_on          = [aws_vpc.my_vpc]
 }
 
 # Public Route Table
