@@ -25,7 +25,6 @@ resource "aws_subnet" "public_1a" {
     "kubernetes.io/role/elb"           = "1"     // internet facing load balancers, "1" = "true"
   }
 
-  depends_on = [aws_vpc.my_vpc]
 }
 
 resource "aws_subnet" "public_1b" {
@@ -39,7 +38,6 @@ resource "aws_subnet" "public_1b" {
     "kubernetes.io/cluster/My-Cluster" = "owned"
     "kubernetes.io/role/elb"           = "1" // internet facing load balancers
   }
-  depends_on = [aws_vpc.my_vpc]
 }
 
 # Private Subnets
@@ -54,7 +52,6 @@ resource "aws_subnet" "private_1a" {
     "kubernetes.io/cluster/My-Cluster" = "owned"
     "kubernetes.io/role/internal-elb"  = "1" // load balancer for resources inside VPC
   }
-  depends_on = [aws_vpc.my_vpc]
 }
 
 resource "aws_subnet" "private_1b" {
@@ -68,7 +65,6 @@ resource "aws_subnet" "private_1b" {
     "kubernetes.io/cluster/My-Cluster" = "owned"
     "kubernetes.io/role/internal-elb"  = "1" // load balancer for resources inside VPC
   }
-  depends_on = [aws_vpc.my_vpc]
 }
 
 # Private Subnets for RDS
@@ -107,7 +103,12 @@ resource "aws_db_subnet_group" "RDS_subnet" {
 resource "aws_internet_gateway" "my_IWG" {
   vpc_id = aws_vpc.my_vpc.id
   region = var.my_region
-  depends_on = [aws_vpc.my_vpc]
+}
+
+resource "aws_internet_gateway_attachment " "my_IWG_attachment" {
+  vpc_id             = aws_vpc.my_vpc.id
+  internet_gateway_id = aws_internet_gateway.my_IWG.id
+  depends_on = [ aws_vpc.my_vpc ]
 }
 
 # Public Route Table
@@ -121,6 +122,7 @@ resource "aws_route_table" "public_rt" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.my_IWG.id
   }
+  depends_on = [aws_vpc.my_vpc]
 }
 
 resource "aws_route_table_association" "public_association_a" {
