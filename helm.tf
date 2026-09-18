@@ -13,10 +13,7 @@ resource "kubernetes_storage_class_v1" "grafana_storage_class" {
   metadata {
     name = "gp3"
     labels = {
-      app.kubernetes.io/instance="kube-prometheus-stack"
-      app.kubernetes.io/name="grafana"
-      app.kubernetes.io/version="13.2.1"
-      helm.sh/chart="grafana-13.2.4"
+      app="kube-prometheus-stack"
     }
   }
 
@@ -33,12 +30,7 @@ resource "kubernetes_storage_class_v1" "prometheus_storage_class" {
   metadata {
     name = "gp3"
     labels = {
-      app.kubernetes.io/instance="kube-prometheus-stack-prometheus"
-      app.kubernetes.io/managed-by="prometheus-operator"
-      app.kubernetes.io/name="prometheus"
-      operator.prometheus.io/name="kube-prometheus-stack-prometheus"
-      operator.prometheus.io/shard="0"
-      prometheus="kube-prometheus-stack-prometheus"
+      app="kube-prometheus-stack-prometheus"
     }
   }
 
