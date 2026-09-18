@@ -28,7 +28,7 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "9.5.9"
   namespace  = kubernetes_namespace_v1.argocd.metadata[0].name
-  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user, kubernetes_namespace_v1.argocd]
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
 
 # /*
