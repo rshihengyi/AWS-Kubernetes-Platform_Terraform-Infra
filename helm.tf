@@ -2,12 +2,12 @@
     ArgoCD Helm Chart v9.5.9
 */
 
-#resource "kubernetes_namespace_v1" "argocd" {
-#  metadata {
-#    name = "argocd"
-#  }
-#  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
-#}
+# resource "kubernetes_namespace_v1" "argocd" {
+#   metadata {
+#     name = "argocd"
+#   }
+#   depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
+# }
 
 resource "kubernetes_storage_class_v1" "grafana_storage_class" {
   metadata {
@@ -27,7 +27,7 @@ resource "helm_release" "argocd" {
   chart      = "argo-cd"
   repository = "https://argoproj.github.io/argo-helm"
   version    = "9.5.9"
-  namespace  = kubernetes_namespace_v1.argocd.metadata[0].name
+  namespace  = "argocd"
   depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
 
