@@ -9,6 +9,19 @@ resource "kubernetes_namespace_v1" "argocd" {
   depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
 
+resource "kubernetes_storage_class_v1" "grafana_storage_class" {
+  metadata {
+    name = "monitoring"
+  }
+
+  storage_provisioner = "ebs.csi.aws.com"
+  parameters = {
+    type                = "gp3"
+    volume-binding-mode = "WaitForFirstConsumer"
+  }
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
+}
+
 resource "helm_release" "argocd" {
   name       = "argocd"
   chart      = "argo-cd"

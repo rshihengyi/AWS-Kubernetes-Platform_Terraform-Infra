@@ -104,7 +104,6 @@ resource "aws_internet_gateway" "my_IWG" {
   vpc_id = aws_vpc.my_vpc.id
   region = var.my_region
 }
-
 # Public Route Table
 
 /* If traffic want to reach <cidr_block>, go to <gateway_id> */
