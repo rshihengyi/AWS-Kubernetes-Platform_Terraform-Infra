@@ -40,11 +40,11 @@ module "eks" {
     node_group = {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       ami_type       = "AL2023_x86_64_STANDARD"
-      instance_types = ["t3.small"] // CPU: 1   Mem: 2 GiB RAM
+      instance_types = ["t3.medium"] // CPU:    Mem: 4 GiB RAM
 
-      min_size     = 4 //total amount of running worker nodes spread across the subnets. 
-      max_size     = 5
-      desired_size = 4
+      min_size     = 2 //total amount of running worker nodes spread across the subnets. 
+      max_size     = 3
+      desired_size = 2
     }
   }
 
