@@ -26,21 +26,21 @@ resource "kubernetes_storage_class_v1" "grafana_storage_class" {
 }
 
 
-resource "kubernetes_storage_class_v1" "prometheus_storage_class" {
-  metadata {
-    name = "gp3"
-    labels = {
-      app="kube-prometheus-stack-prometheus"
-    }
-  }
+# resource "kubernetes_storage_class_v1" "prometheus_storage_class" {
+#   metadata {
+#     name = "gp3"
+#     labels = {
+#       app="kube-prometheus-stack-prometheus"
+#     }
+#   }
 
-  storage_provisioner = "ebs.csi.aws.com"
-  parameters = {
-    type              = "gp3"
-  }
-  volume_binding_mode = "WaitForFirstConsumer"
-  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
-}
+#   storage_provisioner = "ebs.csi.aws.com"
+#   parameters = {
+#     type              = "gp3"
+#   }
+#   volume_binding_mode = "WaitForFirstConsumer"
+#   depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
+# }
 
 
 resource "helm_release" "argocd" {
