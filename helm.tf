@@ -12,6 +12,12 @@ resource "kubernetes_namespace_v1" "argocd" {
 resource "kubernetes_storage_class_v1" "grafana_storage_class" {
   metadata {
     name = "gp3"
+    labels = {
+      app.kubernetes.io/instance="kube-prometheus-stack"
+      app.kubernetes.io/name="grafana"
+      app.kubernetes.io/version="13.2.1"
+      helm.sh/chart="grafana-13.2.4"
+    }
   }
 
   storage_provisioner = "ebs.csi.aws.com"
@@ -21,6 +27,29 @@ resource "kubernetes_storage_class_v1" "grafana_storage_class" {
   volume_binding_mode = "WaitForFirstConsumer"
   depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
+
+
+resource "kubernetes_storage_class_v1" "prometheus_storage_class" {
+  metadata {
+    name = "gp3"
+    labels = {
+      app.kubernetes.io/instance="kube-prometheus-stack-prometheus"
+      app.kubernetes.io/managed-by="prometheus-operator"
+      app.kubernetes.io/name="prometheus"
+      operator.prometheus.io/name="kube-prometheus-stack-prometheus"
+      operator.prometheus.io/shard="0"
+      prometheus="kube-prometheus-stack-prometheus"
+    }
+  }
+
+  storage_provisioner = "ebs.csi.aws.com"
+  parameters = {
+    type              = "gp3"
+  }
+  volume_binding_mode = "WaitForFirstConsumer"
+  depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
+}
+
 
 resource "helm_release" "argocd" {
   name       = "argocd"
