@@ -17,8 +17,8 @@ resource "kubernetes_storage_class_v1" "grafana_storage_class" {
   storage_provisioner = "ebs.csi.aws.com"
   parameters = {
     type              = "gp3"
-    volume_binding_mode  = "WaitForFirstConsumer"
   }
+  volume_binding_mode = "WaitForFirstConsumer"
   depends_on = [module.eks, aws_eks_access_entry.dev_sso_user]
 }
 
